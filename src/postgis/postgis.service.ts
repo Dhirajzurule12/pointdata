@@ -15,28 +15,25 @@ export class PostgisService {
     @InjectRepository(postgi)
     private readonly PostgiRepository: Repository<postgi>,
   ) {}
-     
-  async saveFile(file:any):Promise<string[]>{
-    const csv= require('csvtojson')
-    const csvFilePath=process.cwd()+'/'+file.path;
 
-    const postArray= await csv().fromFile(csvFilePath);
+  async saveFile(file: any): Promise<string[]> {
+    const csv = require('csvtojson');
+    const csvFilePath = process.cwd() + '/' + file.path;
+
+    const postArray = await csv().fromFile(csvFilePath);
     var posts;
 
-    try{
-      posts=await this.PostgiRepository.save(postArray);
-    }catch(error){
-      posts=null;
-    
+    try {
+      posts = await this.PostgiRepository.save(postArray);
+    } catch (error) {
+      posts = null;
     }
     return posts;
-
   }
 
-
-  // create(createPostgiDto: CreatePostgiDto) {
-  //   return this.PostgiRepository.save(createPostgiDto);
-  // }
+  create(createPostgiDto: CreatePostgiDto) {
+    return this.PostgiRepository.save(createPostgiDto);
+  }
 
   findAll() {
     return this.PostgiRepository.find();

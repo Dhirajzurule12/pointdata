@@ -1,8 +1,6 @@
-
-
 export class CreatePostgiDto {
-    id:number;
-    lat:string;
-    lon:string;
-    city:string;
+  id: number;
+  lat: string;
+  long: string;
+  city: string;
 }

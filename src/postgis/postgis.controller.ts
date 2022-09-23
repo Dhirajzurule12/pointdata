@@ -89,23 +89,32 @@ export class PostgisController {
       complete: (results) => results.data,
     });
     console.log(parsedCsv.data[0]);
-    const loadData = {
-      id: parsedCsv.data[0].id,
-      lat: parsedCsv.data[0].lat,
-      lon: parsedCsv.data[0].lon,
-      city: parsedCsv.data[0].city,
-      // location:'0101000020E61000007A8D5DA27A1333403FAA61BF27385240',
-    };
-    console.log(loadData);
-    // this.PostgisService.create(loadData);
-    const response = {
-      message: 'File uploaded successfully!',
-      data: {
-        originalname: file.originalname,
-        // filename: file.filename,
-      },
-    };
-    return response;
+
+    parsedCsv.data.forEach((element) => {
+      var point = {
+        type: 'Point',
+        coordinates: [element.lat, element.long],
+      };
+
+      const loadData = {
+        id: element.id,
+        lat: element.lat,
+        long: element.long,
+        city: element.city,
+        location: point,
+        // location:'0101000020E61000007A8D5DA27A1333403FAA61BF27385240',
+      };
+      console.log(loadData);
+      this.PostgisService.create(loadData);
+      const response = {
+        message: 'File uploaded successfully!',
+        data: {
+          originalname: file.originalname,
+          // filename: file.filename,
+        },
+      };
+      return response;
+    });
   }
   // @Post('file')
   //   @UseInterceptors(
@@ -127,9 +136,13 @@ export class PostgisController {
   //     console.log(parsedCsv)
   //     //console.log(typeof (parsedCsv.data.id))
   //   }
+  // @Get()
+  // getFile() {
+  //   const file = createReadStream(join(process.cwd(), './mapbox/1.csv'));
+  //   console.log(file);
+  // }
   @Get()
-  getFile() {
-    const file = createReadStream(join(process.cwd(), './mapbox/1.csv'));
-    console.log(file);
+  findall(){
+    return this.PostgisService.findAll();
   }
 }
